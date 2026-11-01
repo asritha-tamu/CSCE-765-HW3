@@ -1,0 +1,15 @@
+Test 1: Short input
+Read 18 bytes. Log begins: Normal short test
+
+Test 2: Maximum valid input (127 bytes)
+Read 127 bytes. Log begins: AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA
+Test 3: 128-byte input must be rejected
+Error: input exceeds maximum size of 127 bytes
+PASS: 128-byte input rejected
+Test 4: Missing file must be rejected
+Could not open input file: No such file or directory
+PASS: missing file rejected
+Test 5: Original exploit payload
+Error: input exceeds maximum size of 127 bytes
+PASS: original payload rejected safely
+All tests completed.

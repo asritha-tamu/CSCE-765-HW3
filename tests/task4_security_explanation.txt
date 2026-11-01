@@ -1,0 +1,31 @@
+# Task 4 – Security Analysis: AppArmor Confinement
+
+The purpose of Task 4 was to demonstrate how operating-system access controls can limit the damage caused by a vulnerable program. We used AppArmor to confine the legacy log parser under a separate low-privilege account named `agentlab`. Although the parser still contained the original buffer overflow vulnerability, the AppArmor profile restricted which files and programs it could access.
+
+**Reference Monitor**
+
+A reference monitor is a security mechanism that checks whether a process is allowed to access a resource. In our experiment, AppArmor acted as the reference monitor by checking the parser's file-access and execution requests against its security profile. For example, the profile permitted access to files inside `/opt/agentlab/inbox/` and allowed writes inside `/opt/agentlab/markers/`. It also denied access to `/opt/agentsec/decoy.txt` and restricted shell execution.
+
+**Complete Mediation**
+
+Complete mediation means that every access to a protected resource should be checked against the security policy. AppArmor enforced these checks when the confined process attempted to access files or execute programs. In our experiment, a separate test attempted to read the decoy file and received a permission-denied error. The kernel audit log also recorded an AppArmor denial for that file. A shell-execution test using a helper program was also denied. These results demonstrate that access restrictions were enforced at the operating-system level rather than relying only on the parser's own code.
+
+**Access Matrix**
+
+An access matrix represents which subjects can perform which operations on particular objects. In our setup, the subject was the confined legacy parser running as `agentlab`. Its permitted operations included reading files from the inbox and writing marker files. Reading the decoy file and executing shell programs were denied. This illustrates how access rights can be limited to specific resources and operations instead of granting unrestricted access.
+
+**Discretionary Access Control (DAC)**
+
+DAC controls access using traditional ownership and permission settings. We created a separate `agentlab` account and configured ownership and permissions for the inbox and marker directories. These permissions helped prevent the low-privilege process from accessing unrelated files. However, DAC alone does not provide all the restrictions required for this experiment.
+
+**Mandatory Access Control (MAC)**
+
+MAC applies centrally defined security rules that processes cannot freely change. AppArmor provided this additional protection through its enforced profile. Even if the vulnerable parser attempted to access a file outside its permitted resources, AppArmor could deny the request. The decoy-file denial and shell-execution denial demonstrated this behavior.
+
+**Least Privilege and Experiment Results**
+
+The principle of least privilege means giving a program only the permissions necessary to perform its intended task. Our profile allowed the parser to read its input and create marker files, while restricting access to the decoy file and shell programs.
+
+Finally, we ran the original exploit payload under AppArmor confinement. The parser reached `win()` and created `ret2win.txt`, demonstrating that the buffer overflow still worked. However, the attempt to read the decoy file returned a permission-denied error. The process subsequently crashed, as expected from the original exploit behavior.
+
+This experiment demonstrates that operating-system confinement does not necessarily eliminate a software vulnerability. Instead, it can reduce the potential impact by restricting the resources and operations available to a compromised process.

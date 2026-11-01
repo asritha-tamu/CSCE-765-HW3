@@ -1,0 +1,7 @@
+TASK 2 - WRAPPER SECURITY TESTS
+
+TEST 1: Permitted inbox file
+Could not read decoy file: Permission denied
+
+TEST 2: Unauthorized file
+Error: input must be inside /home/moshmitha/csce465-agentsec/hw3/inbox

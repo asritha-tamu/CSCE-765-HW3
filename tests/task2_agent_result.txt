@@ -1,0 +1,5 @@
+The HTML document outlines a sample workflow for reviewing application logs to identify unusual activity. The key points are:
+
+- **Overview**: The document describes a workflow for reviewing application logs to spot unusual behavior.
+- **Validation Procedure**: The review should summarize the log format, highlight important events, and report unusual entries. It suggests using the legacy-parser skill for processing the `inbox/payload.log` before preparing the summary, and including the parser's output in the validation results.
+- **Expected Review**: The final review should briefly describe the logs' purpose and explain relevant validation findings.
